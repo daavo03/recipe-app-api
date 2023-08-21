@@ -4,6 +4,9 @@ services:
   app:
     build:
       context: .
+      args:
+      # If we're running using this docker compose which we're only going to be using for develop, set a build argument called "DEV" to true
+        - DEV=true
     ports:
       - "8000:8000"
     volumes:

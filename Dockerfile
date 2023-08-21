@@ -7,9 +7,14 @@ ENV PYTHONUNBUFFERED 1
 
 
 COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
+
+# When we use the Dockerfile through the dockercompose config it's going to update the DEV to True, whereas when we use it
+# in any other dockercompose config it's going to leave it as false, by default we're not running in develop mode
+ARG DEV=false
 
 # This creates a new virtualenv to store our dependencies
 RUN python -m venv /py && \
@@ -17,6 +22,10 @@ RUN python -m venv /py && \
   /py/bin/pip install --upgrade pip && \
   # Installing the python requirements in our virtualenv
   /py/bin/pip install -r /tmp/requirements.txt && \
+  # Add logic to install dev dependencies
+  if [ $DEV = "true" ]; \
+    then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+  fi && \
   # We remove the tmp directory, bc we don't want extra dependencies on our image once it's created
   rm -rf /tmp && \
   # This block adds a new user inside our image to not use the root user
