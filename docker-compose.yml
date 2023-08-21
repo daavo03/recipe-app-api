@@ -17,6 +17,7 @@ services:
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
     env_file: .env
+    # Telling compose the app service depends on the db service
     depends_on:
       - db
 
@@ -27,5 +28,6 @@ services:
       - dev-db-data:/var/lib/postgresql/data
     env_file: .env
 
+# To store persistent data using compose, Allow us to map a directory inside the Container to dir in local machine
 volumes:
   dev-db-data:
