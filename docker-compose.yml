@@ -11,8 +11,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app
-      - .env:/app
+      - .:/app
     # This is the command used to run the service. We can override it when we run docker-compose run
     # If we don't specify this option it's going to use the command define in the Dockerfile
     command: >
