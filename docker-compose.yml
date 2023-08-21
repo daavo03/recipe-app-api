@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    # This is the command used to run the service. We can override it when we run docker-compose run
+    # If we don't specify this option it's going to use the command define in the Dockerfile
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
