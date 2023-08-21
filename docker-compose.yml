@@ -16,7 +16,11 @@ services:
     # If we don't specify this option it's going to use the command define in the Dockerfile
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
-    env_file: ./app/.env
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
     # Telling compose the app service depends on the db service
     depends_on:
       - db
@@ -26,7 +30,10 @@ services:
     container_name: PostgresQL
     volumes:
       - dev-db-data:/var/lib/postgresql/data
-    env_file: ./app/.env
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
 
 # To store persistent data using compose, Allow us to map a directory inside the Container to dir in local machine
 volumes:
