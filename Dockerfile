@@ -20,6 +20,13 @@ ARG DEV=false
 RUN python -m venv /py && \
   # From our virtualenv we want to upgrade pip
   /py/bin/pip install --upgrade pip && \
+  # Install postgresql client package
+  apk add --update --no-cache postgresql-client && \
+  # Sets a virtual dependecy package, kind of groups the packages we into this tmp-build-deps and we can use this
+  # this packages later on inside our dockerfile
+  apk add --update --no-cache --virtual .tmp-build-deps \
+    # Packages needed to install our postgres adapter
+    build-base postgresql-dev musl-dev && \
   # Installing the python requirements in our virtualenv
   /py/bin/pip install -r /tmp/requirements.txt && \
   # Add logic to install dev dependencies
@@ -28,6 +35,7 @@ RUN python -m venv /py && \
   fi && \
   # We remove the tmp directory, bc we don't want extra dependencies on our image once it's created
   rm -rf /tmp && \
+  apk del .tmp-build-deps && \
   # This block adds a new user inside our image to not use the root user
   adduser \
     --disabled-password \
