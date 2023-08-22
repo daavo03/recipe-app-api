@@ -1,21 +1,23 @@
-version: "3.9"
+version: '3.9'
 
 services:
   app:
     build:
       context: .
       args:
-      # If we're running using this docker compose which we're only going to be using for develop, set a build argument called "DEV" to true
+        # If we're running using this docker compose which we're only going to be using for develop, set a build argument called "DEV" to true
         - DEV=true
     container_name: RecipeAPI
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - ./app:/app
     # This is the command used to run the service. We can override it when we run docker-compose run
     # If we don't specify this option it's going to use the command define in the Dockerfile
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
       - DB_NAME=devdb
