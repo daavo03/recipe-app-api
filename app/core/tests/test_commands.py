@@ -35,7 +35,7 @@ class CommandTest(SimpleTestCase):
         call_command('wait_for_db')
 
         # This ensures that the mock check method is called with a parameter
-        patched_check.assert_called_once_with(database=['default'])
+        patched_check.assert_called_once_with(databases=['default'])
 
     # Second test case. What should happen if the DB isn't ready
     @patch('time.sleep')
@@ -59,4 +59,4 @@ class CommandTest(SimpleTestCase):
         call_command('wait_for_db')
 
         self.assertEqual(patched_check.call_count, 6)
-        patched_check.assert_called_with(database=["default"])
+        patched_check.assert_called_with(databases=["default"])
